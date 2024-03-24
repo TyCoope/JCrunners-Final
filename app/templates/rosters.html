@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %} Rosters {% endblock %}
+
+
+{% block content %}
+
+<!-- Header-->
+
+        <!-- About section-->
+        <section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-10">
+
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+
+                        {% for message in messages %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {% endif %}
+                        {% endwith %}
+
+                       <br>
+                        <h1>Manage Rosters</h1>
+                        <br>
+                            <p><button type="button" class="btn btn-success btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#add_roster">Add Roster</button></p>
+
+                        <br>
+                        <div class="modal fade" id="add_roster" aria-labelledby="add_account_typeLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="add_modalLabel">Add Roster</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('rosters.roster') }}" method="POST">
+                                                <div class="modal-body">
+                                                    <p>
+                                                        <label for="roster_year">Roster Year:</label><br>
+                                                        <input type="number" id="roster_year" name="roster_year" size="32">
+                                                    </p>
+                                                    <p>
+                                                        <label for="roster_season">Roster Season:</label><br>
+                                                        <select id="roster_season" name="roster_season">
+                                                            <option value="Cross Country">Cross Country</option>
+                                                            <option value="Track and Field">Track and Field</option>
+                                                        </select>
+                                                    </p>
+                                                    <p>
+                                                    <label for="add_gender">Team Gender</label><br>
+                                                        <select id="add_gender" name="gender">
+                                                            <option value="Male">Male</option>
+                                                            <option value="Female">Female</option>
+                                                        </select>
+                                                    </p>
+                                                    <p>
+                                                        <input type="submit" class="btn btn-success" value="Submit">
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </form>
+
+                                            </div>
+                                        </div>
+                                </div>
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Roster Year</th>
+                            <th scope="col">Roster Season</th>
+                            <th scope="col">Gender</th>
+                            <th scope="col">Actions</th>
+                          </thead>
+                            {% for roster in rosters %}
+                          <tr>
+                                <td align="left">{{ roster.roster_year }}</td>
+                                <td align="left">{{ roster.roster_season }}</td>
+                                <td align="left">{{ roster.gender }}</td>
+                            <td>
+                                <button type="button" class="btn btn-info" onclick="window.location.href='{{ url_for('rosters.roster_details', roster_id=roster.roster_id) }}'">Details</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update_modal{{roster.roster_id}}">Update Info</button>
+                                <div class="modal fade" id="update_modal{{roster.roster_id}}" aria-labelledby="update_modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="update_modalLabel">Update Roster</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('rosters.update_roster', roster_id=roster.roster_id) }}" method="POST">
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            <label for="roster_year">Roster Year:</label><br>
+                                                            <input type="text" id="roster_year_update" name="roster_year" size="32" value="{{ roster.roster_year }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="roster_season">Roster Season:</label><br>
+                                                            <input type="text" id="roster_season_update" name="roster_season" size="32" value="{{ roster.roster_season }}">
+                                                        </p>
+                                                        <label for="update_gender">Team Gender</label>
+                                                        <select id="update_gender" name="gender">
+                                                            <option value="Male" {% if roster.gender == 'Male' %}selected{% endif %}>Male</option>
+                                                            <option value="Female" {% if roster.gender == 'Female' %}selected{% endif %}>Female</option>
+                                                        </select>
+                                                        <p>
+                                                            <input type="submit" class="btn btn-success" value="Update Roster">
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                            </div>
+
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_modal{{roster.roster_id}}">Delete</button>
+
+                            <!-- DELETE MODAL -->
+                                <div class="modal fade" id="delete_modal{{roster.roster_id}}" aria-labelledby="delete_modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete_modalLabel">Delete Roster</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete {{ roster.roster_year }}? This can't be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{url_for('rosters.delete_roster', roster_id=roster.roster_id)}}" method="POST">
+                                                    <input type="submit" class="btn btn-primary" value="Delete">
+                                                </form>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                          </tr>
+                            {% endfor %}
+                        </table>
+                       <br>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+<script>
+    document.getElementById('roster_year').value = new Date().getFullYear();
+</script>
+
+
+
+{% endblock %}

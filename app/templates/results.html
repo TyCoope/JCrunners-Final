@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block title %} Races {% endblock %}
+
+
+{% block content %}
+
+<!-- Header-->
+
+        <!-- About section-->
+        <section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-10">
+
+
+
+                       <br>
+                        <h1>Male 800 Results</h1>
+                        <br>
+
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Grad Year</th>
+                            <th scope="col">Runner Name</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Ranking</th>
+                          </thead>
+                            {% for male_runner_800 in male_runners_800 %}
+                                <tr style="{{ 'font-weight: bold;' if male_runner_800.is_in_latest_roster else '' }}">
+
+                                    <td align="left">{{ male_runner_800.grad_year }}</td>
+                                    <td align="left">{{ male_runner_800.first_name }} {{ male_runner_800.last_name }}</td>
+                                    <td align="left">{{ male_runner_800.time_800_pr }}</td>
+                                    <td align="left">{{ male_runner_800.runner_ranking }}</td>
+
+                                </tr>
+                                {% endfor %}
+
+                        </table>
+
+                        <br>
+                        <h1>Female 800 Results</h1>
+                        <br>
+
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Grad Year</th>
+                            <th scope="col">Runner Name</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Ranking</th>
+                          </thead>
+                            {% for female_runner_800 in female_runners_800 %}
+                                <tr style="{{ 'font-weight: bold;' if female_runner_800.is_in_latest_roster else '' }}">
+
+                                    <td align="left">{{ female_runner_800.grad_year }}</td>
+                                    <td align="left">{{ female_runner_800.first_name }} {{ female_runner_800.last_name }}</td>
+                                    <td align="left">{{ female_runner_800.time_800_pr }}</td>
+                                    <td align="left">{{ female_runner_800.runner_ranking }}</td>
+
+                                </tr>
+                                {% endfor %}
+
+                        </table>
+
+                        <br>
+                        <h1>Male 1600 Results</h1>
+                        <br>
+
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Grad Year</th>
+                            <th scope="col">Runner Name</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Ranking</th>
+                          </thead>
+                            {% for male_runner_1600 in male_runners_1600 %}
+                                <tr style="{{ 'font-weight: bold;' if male_runner_1600.is_in_latest_roster else '' }}">
+
+                                    <td align="left">{{ male_runner_1600.grad_year }}</td>
+                                    <td align="left">{{ male_runner_1600.first_name }} {{ male_runner_1600.last_name }}</td>
+                                    <td align="left">{{ male_runner_1600.time_1600_pr }}</td>
+                                    <td align="left">{{ male_runner_1600.runner_ranking }}</td>
+
+                                </tr>
+                                {% endfor %}
+
+                        </table>
+
+
+                        <br>
+                        <h1>Female 1600 Results</h1>
+                        <br>
+
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Grad Year</th>
+                            <th scope="col">Runner Name</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Ranking</th>
+                          </thead>
+                            {% for female_runner_1600 in female_runners_1600 %}
+                                <tr style="{{ 'font-weight: bold;' if female_runner_1600.is_in_latest_roster else '' }}">
+
+                                    <td align="left">{{ female_runner_1600.grad_year }}</td>
+                                    <td align="left">{{ female_runner_1600.first_name }} {{ female_runner_1600.last_name }}</td>
+                                    <td align="left">{{ female_runner_1600.time_1600_pr }}</td>
+                                    <td align="left">{{ female_runner_1600.runner_ranking }}</td>
+
+                                </tr>
+                                {% endfor %}
+
+                        </table>
+
+
+                        <br>
+                        <h1>Male 3200 Results</h1>
+                        <br>
+
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Grad Year</th>
+                            <th scope="col">Runner Name</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Ranking</th>
+                          </thead>
+                            {% for male_runner_3200 in male_runners_3200 %}
+                                <tr style="{{ 'font-weight: bold;' if male_runner_3200.is_in_latest_roster else '' }}">
+
+                                    <td align="left">{{ male_runner_3200.grad_year }}</td>
+                                    <td align="left">{{ male_runner_3200.first_name }} {{ male_runner_3200.last_name }}</td>
+                                    <td align="left">{{ male_runner_3200.time_3200_pr }}</td>
+                                    <td align="left">{{ male_runner_3200.runner_ranking }}</td>
+
+                                </tr>
+                                {% endfor %}
+
+                        </table>
+
+
+                        <br>
+                        <h1>Female 3200 Results</h1>
+                        <br>
+
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Grad Year</th>
+                            <th scope="col">Runner Name</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Ranking</th>
+                          </thead>
+                            {% for female_runner_3200 in female_runners_3200 %}
+                                <tr style="{{ 'font-weight: bold;' if female_runner_3200.is_in_latest_roster else '' }}">
+
+                                    <td align="left">{{ female_runner_3200.grad_year }}</td>
+                                    <td align="left">{{ female_runner_3200.first_name }} {{ female_runner_3200.last_name }}</td>
+                                    <td align="left">{{ female_runner_3200.time_3200_pr }}</td>
+                                    <td align="left">{{ female_runner_3200.runner_ranking }}</td>
+
+                                </tr>
+                                {% endfor %}
+
+                        </table>
+
+
+                        <br>
+                        <h1>This Season Best 800 Results</h1>
+                        <br>
+
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Grad Year</th>
+                            <th scope="col">Runner Name</th>
+                            <th scope="col">Time</th>
+                            <th scope="col">Ranking</th>
+                          </thead>
+                            {% for this_season_runner_800 in this_season_male_runners_800 %}
+                                <tr>
+
+                                    <td align="left">{{ this_season_runner_800.grad_year }}</td>
+                                    <td align="left">{{ this_season_runner_800.first_name }} {{ this_season_runner_800.last_name }}</td>
+                                    <td align="left">{{ this_season_runner_800.time_800_pr }}</td>
+                                    <td align="left">{{ this_season_runner_800.runner_ranking }}</td>
+
+                                </tr>
+                                {% endfor %}
+
+                        </table>
+
+                       <br>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+{% endblock %}

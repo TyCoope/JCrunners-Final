@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %} Runners {% endblock %}
+
+
+{% block content %}
+
+<!-- Header-->
+
+        <!-- About section-->
+        <section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-10">
+
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+
+                        {% for message in messages %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {% endif %}
+                        {% endwith %}
+
+                       <br>
+                        <h1>Manage Runners</h1>
+                        <br>
+                            <p><button type="button" class="btn btn-success btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#add_runner">Add Runner</button></p>
+
+                        <br>
+                        <form action="{{ url_for('runners.runner') }}" method="GET">
+                            <input type="number" id="year" name="year" placeholder="Search by year">
+                            <input type="submit" value="Search">
+                        </form>
+                        <div class="modal fade" id="add_runner" aria-labelledby="add_account_typeLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="add_modalLabel">Add Runner</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('runners.runner') }}" method="POST">
+                                                <div class="modal-body">
+                                                    <table>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="first_name">First Name:</label></td>
+                                                            <td style="padding: 10px;"><input type="text" id="first_name" name="first_name" size="32"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="last_name">Last Name:</label></td>
+                                                            <td style="padding: 10px;"><input type="text" id="last_name" name="last_name" size="32"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="time_800_pr">800m PR:</label></td>
+                                                            <td style="padding: 10px;"><input type="text" id="time_800_pr" name="time_800_pr" size="32"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="time_1600_pr">1600m PR:</label></td>
+                                                            <td style="padding: 10px;"><input type="text" id="time_1600_pr" name="time_1600_pr" size="32"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="time_3200_pr">3200m PR:</label></td>
+                                                            <td style="padding: 10px;"><input type="text" id="time_3200_pr" name="time_3200_pr" size="32"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="time_5k_pr">5k PR:</label></td>
+                                                            <td style="padding: 10px;"><input type="text" id="time_5k_pr" name="time_5k_pr" size="32"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="runner_mile_split_url">MileSplit URL:</label></td>
+                                                            <td style="padding: 10px;"><input type="text" id="runner_mile_split_url" name="runner_mile_split_url" size="32"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="grad_year">Grad Year:</label></td>
+                                                            <td style="padding: 10px;"><input type="number" id="grad_year" name="grad_year" size="32"></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 10px;"><label for="gender">Gender:</label></td>
+                                                            <td style="padding: 10px;">
+                                                                <select id="gender" name="gender">
+                                                                    <option value="Male">Male</option>
+                                                                    <option value="Female">Female</option>
+                                                                </select>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                    <p>
+                                                        <input type="submit" class="btn btn-success" value="Submit">
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </form>
+
+                                            </div>
+                                        </div>
+                                </div>
+                        {% for year, runners in runners_by_year_gender.items() %}
+                        <h2>Class of {{ year[0] }} {{ year[1] }}</h2>
+                        <table class="table">
+                            <thead>
+                                <th scope="col">First Name</th>
+                                <th scope="col">Last Name</th>
+                                <th scope="col">800 PR</th>
+                                <th scope="col">1600 PR</th>
+                                <th scope="col">3200 PR</th>
+                                <th scope="col">5K PR</th>
+                                <th scope="col">Actions</th>
+                            </thead>
+                            {% for runner in runners %}
+                          <tr>
+                                <td align="left">{{ runner.first_name }}</td>
+                                <td align="left">{{ runner.last_name }}</td>
+                                <td align="left">{{ runner.time_800_pr }}</td>
+                                <td align="left">{{ runner.time_1600_pr }}</td>
+                                <td align="left">{{ runner.time_3200_pr }}</td>
+                                <td align="left">{{ runner.time_5k_pr }}</td>
+                            <td>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update_modal{{runner.runner_id}}">Update Info</button>
+                                <div class="modal fade" id="update_modal{{runner.runner_id}}" aria-labelledby="update_modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="update_modalLabel">Update Runner</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('runners.update_runner', runner_id=runner.runner_id) }}" method="POST">
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            <label for="first_name">First Name:</label><br>
+                                                            <input type="text" id="first_name_update" name="first_name" size="32" value="{{ runner.first_name }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="last_name">Last Name:</label><br>
+                                                            <input type="text" id="last_name_update" name="last_name" size="32" value="{{ runner.last_name }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="time_800_pr">800m PR:</label><br>
+                                                            <input type="text" id="time_800_pr_update" name="time_800_pr" size="32" value="{{ runner.time_800_pr }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="time_1600_pr">1600m PR:</label><br>
+                                                            <input type="text" id="time_1600_pr_update" name="time_1600_pr" size="32" value="{{ runner.time_1600_pr }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="time_3200_pr">3200m PR:</label><br>
+                                                            <input type="text" id="time_3200_pr_update" name="time_3200_pr" size="32" value="{{ runner.time_3200_pr }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="time_5k_pr">5k PR:</label><br>
+                                                            <input type="text" id="time_5k_pr_update" name="time_5k_pr" size="32" value="{{ runner.time_5k_pr }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="runner_mile_split_url">MileSplit URL:</label><br>
+                                                            <input type="text" id="runner_mile_split_url_update" name="runner_mile_split_url" size="32" value="{{ runner.runner_mile_split_url }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="grad_year">Grad Year:</label><br>
+                                                            <input type="text" id="grad_year_update" name="grad_year" size="32" value="{{ runner.grad_year }}">
+                                                        </p>
+                                                        <p>
+                                                            <input type="submit" class="btn btn-success" value="Update Runner">
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                            </div>
+
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_modal{{runner.runner_id}}">Delete</button>
+
+                            <!-- DELETE MODAL -->
+                                <div class="modal fade" id="delete_modal{{runner.runner_id}}" aria-labelledby="delete_modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete_modalLabel">Delete Runner</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete {{ runner.first_name }}? This can't be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{url_for('runners.delete_runner', runner_id=runner.runner_id)}}" method="POST">
+                                                    <input type="submit" class="btn btn-primary" value="Delete">
+                                                </form>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                          </tr>
+                            {% endfor %}
+                        </table>
+                        {% endfor %}
+                       <br>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+{% endblock %}

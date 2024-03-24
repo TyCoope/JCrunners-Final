@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %} Races {% endblock %}
+
+
+{% block content %}
+
+<!-- Header-->
+
+        <!-- About section-->
+        <section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-10">
+
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+
+                        {% for message in messages %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {% endif %}
+                        {% endwith %}
+
+                       <br>
+                        <h1>Races
+                            <button type="button" class="btn btn-success btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#add_race">Add Race</button>
+                        </h1>
+                        <br>
+                        <div class="modal fade" id="add_race" aria-labelledby="add_account_typeLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="add_modalLabel">Add Race</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('races.race') }}" method="POST">
+                                                <div class="modal-body">
+                                                    <p>
+                                                        <label for="race_date">Race Date:</label><br>
+                                                        <input type="date" id="race_date" name="race_date">
+                                                    </p>
+                                                    <p>
+                                                        <label for="race_name">Race Name:</label><br>
+                                                        <input type="text" id="race_name" name="race_name" size="32">
+                                                    </p>
+                                                    <p>
+                                                        <label for="race_location">Race Location:</label><br>
+                                                        <input type="text" id="race_location" name="race_location">
+                                                    </p>
+                                                    <p>
+                                                        <label for="race_mile_split_url">Race Milesplit URL:</label><br>
+                                                        <input type="url" id="race_mile_split_url" name="race_mile_split_url">
+                                                    </p>
+                                                    <p>
+                                                        <input type="submit" class="btn btn-success" value="Submit">
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </form>
+                                            </div>
+                                        </div>
+                                </div>
+                        {% for year, races in races_by_year.items() %}
+                        <h2>{{ year }}</h2>
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">Race Name</th>
+                            <th scope="col">Race Date</th>
+                            <th scope="col">Race Location</th>
+                            <th scope="col">Actions</th>
+                          </thead>
+                            {% for race in races %}
+                          <tr>
+                            <td align="left">{{ race.race_date }}</td>
+                            <td align="left">
+                                {% if race.race_mile_split_url %}
+                                    <a href="{{ race.race_mile_split_url }}" target="_blank">{{ race.race_name }}</a>
+                                {% else %}
+                                    {{ race.race_name }}
+                                {% endif %}
+                            </td>
+                            <td align="left">{{ race.race_location }}</td>
+                            <td>
+                                <button type="button" class="btn btn-info" onclick="window.location.href='{{ url_for('race_times.race_time', race_id=race.race_id) }}'">Add Times</button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#update_modal{{race.race_id}}">Update Race</button>
+                                <div class="modal fade" id="update_modal{{race.race_id}}" aria-labelledby="update_modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="update_modalLabel">Update Race</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('races.update_race', race_id=race.race_id) }}" method="POST">
+                                                    <div class="modal-body">
+                                                        <p>
+                                                            <label for="race_date">Race Date:</label><br>
+                                                            <input type="date" id="race_date_update" name="race_date" value="{{ race.race_date }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="race_name">Race Name:</label><br>
+                                                            <input type="text" id="race_name_update" name="race_name" size="32" value="{{ race.race_name }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="race_location">Race Location:</label><br>
+                                                            <input type="text" id="race_location_update" name="race_location" value="{{ race.race_location }}">
+                                                        </p>
+                                                        <p>
+                                                            <label for="race_mile_split_url">Race Milesplit URL:</label><br>
+                                                            <input type="url" id="race_mile_split_url_update" name="race_mile_split_url" value="{{ race.race_mile_split_url }}">
+                                                        </p>
+                                                        <p>
+                                                            <input type="submit" class="btn btn-success" value="Update Race">
+                                                        </p>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </form>
+
+                                            </div>
+                                        </div>
+                                </div>
+
+                                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_modal{{race.race_id}}">Delete</button>
+
+                            <!-- DELETE MODAL -->
+                                <div class="modal fade" id="delete_modal{{race.race_id}}" aria-labelledby="delete_modalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="delete_modalLabel">Delete Race</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>Are you sure you want to delete <strong>{{ race.race_name }} </strong>? This can't be undone.</p>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                <form action="{{url_for('races.delete_race', race_id=race.race_id)}}" method="POST">
+                                                    <input type="submit" class="btn btn-primary" value="Delete">
+                                                </form>
+                                          </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                          </tr>
+                            {% endfor %}
+                        </table>
+                        {% endfor %}
+                       <br>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
+
+{% endblock %}

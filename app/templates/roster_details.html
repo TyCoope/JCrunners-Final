@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %} Roster Details {% endblock %}
+
+{% block content %}
+
+<section id="about">
+            <div class="container px-4">
+                <div class="row gx-4 justify-content-center">
+                    <div class="col-lg-10">
+
+                        {% with messages = get_flashed_messages() %}
+                        {% if messages %}
+
+                        {% for message in messages %}
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+
+                        {% endif %}
+                        {% endwith %}
+
+                       <br>
+                        <h1>Manage {{ roster.roster_year }} {{ roster.roster_season }} {{ roster.gender }} Roster</h1>
+                        <br>
+
+                            <p><button type="button" class="btn btn-success btn-lg btn-block" data-bs-toggle="modal" data-bs-target="#add_runner_to_roster">Add Runner to Roster</button></p>
+
+                        <br>
+                        <div class="modal fade" id="add_runner_to_roster" aria-labelledby="add_account_typeLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="add_modalLabel">Add Runner to Roster</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url_for('rosters.add_runner_to_roster', roster_id=roster.roster_id) }}" method="POST">
+                                                <div class="modal-body">
+                                                    <label for="runner">Select Runner:</label>
+                                                    <select id="runner" name="runner_id">
+                                                        {% if runner_drop %}
+                                                            {% for runner in runner_drop %}
+                                                            <option value="{{ runner.runner_id }}">{{ runner.first_name }} {{ runner.last_name }}</option>
+                                                            {% endfor %}
+                                                        {% else %}
+                                                            <option>No runners remaining</option>
+                                                        {% endif %}
+                                                    </select>
+
+                                                    <p>
+                                                        <input type="submit" class="btn btn-success" value="Submit">
+                                                    </p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </form>
+
+                                            </div>
+                                        </div>
+                                </div>
+                        <table  class="table">
+                          <thead>
+                            <th scope="col">First Name</th>
+                            <th scope="col">Last Name</th>
+                            <th scope="col">Actions</th>
+                          </thead>
+                            {% for c_roster in current_roster %}
+                          <tr>
+                                <td align="left">{{ c_roster.first_name }}</td>
+                                <td align="left">{{ c_roster.last_name }}</td>
+                                <td>
+
+                                    <!-- DELETE BUTTON -->
+                                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete_modal{{c_roster.roster_detail_id}}">Delete</button>
+
+                                    <!-- DELETE MODAL -->
+                                    <div class="modal fade" id="delete_modal{{c_roster.roster_detail_id}}" aria-labelledby="delete_modalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="delete_modalLabel">Delete Runner from Roster</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <p>Are you sure you want to remove {{ c_roster.first_name }} from the roster?</p>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <form action="{{url_for('rosters.delete_runner_from_roster', roster_detail_id=c_roster.roster_detail_id, roster_id=roster.roster_id)}}" method="POST">
+                                                        <input type="submit" class="btn btn-primary" value="Delete">
+                                                    </form>
+                                              </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                          </tr>
+                            {% endfor %}
+                        </table>
+                       <br>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock %}
