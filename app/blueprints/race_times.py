@@ -31,12 +31,12 @@ def race_time(race_id):
                 conn = get_db()
                 with conn.cursor() as cur:
                     cur.execute("""
-                        INSERT INTO race_detail (runner_id, race_id, race_type_id, duration_time)
+                        INSERT INTO ygh_race_detail (runner_id, race_id, race_type_id, duration_time)
                         VALUES (%s, %s, %s, %s)
                     """, (runner_id, race_id, race_type_id, duration_time))
 
                     # Fetch the runner's profile
-                    cur.execute("SELECT * FROM runners WHERE runner_id=%s", (runner_id,))
+                    cur.execute("SELECT * FROM ygh_runners WHERE runner_id=%s", (runner_id,))
                     runner = cur.fetchone()
 
                     # Get the field to update based on the race_type_id
@@ -45,7 +45,7 @@ def race_time(race_id):
                     # Check if the field is None or empty or if the new time is lower
                     if runner[field_to_update] in [None, ''] or runner[field_to_update] > duration_time:
                         # If either condition is true, update the runner's profile
-                        cur.execute(f"UPDATE runners SET {field_to_update}=%s WHERE runner_id=%s",
+                        cur.execute(f"UPDATE ygh_runners SET {field_to_update}=%s WHERE runner_id=%s",
                                     (duration_time, runner_id))
                     conn.commit()
 
@@ -59,31 +59,31 @@ def race_time(race_id):
         with conn.cursor() as cur:
             cur.execute("""
                 SELECT
-                    runners.runner_id,
-                    runners.first_name,
-                    runners.last_name,
-                    runners.gender,
-                    race_detail.race_detail_id,
-                    race_detail.race_id,
-                    race_detail.race_type_id,
-                    race_detail.duration_time,
-                    race.race_name,
-                    race_type.race_type_name,
-                    race_type.rank_order
+                    ygh_runners.runner_id,
+                    ygh_runners.first_name,
+                    ygh_runners.last_name,
+                    ygh_runners.gender,
+                    ygh_race_detail.race_detail_id,
+                    ygh_race_detail.race_id,
+                    ygh_race_detail.race_type_id,
+                    ygh_race_detail.duration_time,
+                    ygh_race.race_name,
+                    ygh_race_type.race_type_name,
+                    ygh_race_type.rank_order
                 FROM
-                    runners
+                    ygh_runners
                 JOIN
-                    race_detail ON runners.runner_id = race_detail.runner_id
+                    ygh_race_detail ON ygh_runners.runner_id = ygh_race_detail.runner_id
                 JOIN
-                    race ON race_detail.race_id = race.race_id
+                    ygh_race ON ygh_race_detail.race_id = ygh_race.race_id
                 JOIN
-                    race_type ON race_detail.race_type_id = race_type.race_type_id
+                    ygh_race_type ON ygh_race_detail.race_type_id = ygh_race_type.race_type_id
                 WHERE
-                    race.race_id = %s
+                    ygh_race.race_id = %s
                 ORDER BY
-                    race_type.rank_order,
-                    runners.gender,
-                    race_detail.duration_time;
+                    ygh_race_type.rank_order,
+                    ygh_runners.gender,
+                    ygh_race_detail.duration_time;
             """, (race_id,))
             results = [dict(row) for row in cur.fetchall()]
         # Group the results by race_type_name and then by gender
@@ -114,10 +114,10 @@ def add_race_time(race_id):
         conn = get_db()
         with conn.cursor() as cur:
             cur.execute("""
-                SELECT runners.*
-                FROM runners
-                JOIN roster_detail ON runners.runner_id = roster_detail.runner_id
-                WHERE roster_detail.roster_id = %s
+                SELECT ygh_runners.*
+                FROM ygh_runners
+                JOIN ygh_roster_detail ON ygh_runners.runner_id = ygh_roster_detail.runner_id
+                WHERE ygh_roster_detail.roster_id = %s
             """, (roster_id,))
             runners = [dict(row) for row in cur.fetchall()]
 
@@ -128,7 +128,7 @@ def add_race_time(race_id):
 def delete_race_time(race_detail_id, race_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("DELETE FROM race_detail WHERE race_detail_id = %s", (race_detail_id,))
+        cur.execute("DELETE FROM ygh_race_detail WHERE race_detail_id = %s", (race_detail_id,))
         conn.commit()
 
     return redirect(url_for('race_times.race_time', race_id=race_id))
@@ -140,7 +140,7 @@ def update_race_time(race_detail_id, race_id):
     duration_time = request.form['duration_time']
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("UPDATE race_detail SET duration_time = %s WHERE race_detail_id = %s", (duration_time, race_detail_id))
+        cur.execute("UPDATE ygh_race_detail SET duration_time = %s WHERE race_detail_id = %s", (duration_time, race_detail_id))
         conn.commit()
 
         # Map race_type_id to the corresponding field in the runners table
@@ -152,7 +152,7 @@ def update_race_time(race_detail_id, race_id):
         }
 
         # Fetch the runner's profile
-        cur.execute("SELECT * FROM runners WHERE runner_id=%s", (runner_id,))
+        cur.execute("SELECT * FROM ygh_runners WHERE runner_id=%s", (runner_id,))
         runner = cur.fetchone()
 
         # Get the field to update based on the race_type_id
@@ -161,7 +161,7 @@ def update_race_time(race_detail_id, race_id):
         # Check if the field is None or empty or if the new time is lower
         if runner[field_to_update] in [None, ''] or runner[field_to_update] > duration_time:
             # If either condition is true, update the runner's profile
-            cur.execute(f"UPDATE runners SET {field_to_update}=%s WHERE runner_id=%s",
+            cur.execute(f"UPDATE ygh_runners SET {field_to_update}=%s WHERE runner_id=%s",
                         (duration_time, runner_id))
         conn.commit()
 
@@ -174,25 +174,25 @@ def update_race_time(race_detail_id, race_id):
 def fetch_rosters_from_db():
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT * FROM rosters ORDER BY roster_year DESC")
+        cur.execute("SELECT * FROM ygh_rosters ORDER BY roster_year DESC")
         return cur.fetchall()
 
 def fetch_race_types_from_db():
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT * FROM race_type")
+        cur.execute("SELECT * FROM ygh_race_type")
         return cur.fetchall()
 
 def fetch_race_info_from_db(race_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT race_id, race_name, EXTRACT(YEAR FROM race_date) as race_year FROM race WHERE race_id = %s", (race_id,))
+        cur.execute("SELECT race_id, race_name, EXTRACT(YEAR FROM race_date) as race_year FROM ygh_race WHERE race_id = %s", (race_id,))
         return cur.fetchone()
 
 def fetch_runner_id_from_db(race_detail_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT runner_id, race_type_id FROM race_detail WHERE race_detail_id = %s", (race_detail_id,))
+        cur.execute("SELECT runner_id, race_type_id FROM ygh_race_detail WHERE race_detail_id = %s", (race_detail_id,))
         result = cur.fetchone()
         print(result)
         return result['runner_id'],result['race_type_id']

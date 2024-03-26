@@ -30,13 +30,10 @@ def result():
 def get_best_runners(gender, distance):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT roster_id FROM rosters WHERE gender = %s ORDER BY roster_year DESC LIMIT 1", (gender,))
-        roster_id = cur.fetchone()['roster_id']
-
+        table_name = "ygh_runners"  # replace with your actual table name
         sql = f"""
-            SELECT runner_id, grad_year, {distance}, first_name, last_name,
-            ROW_NUMBER() OVER (ORDER BY {distance} ASC) as runner_ranking
-            FROM runners
+            SELECT runner_id, grad_year, {distance}, first_name, last_name
+            FROM {table_name}
             WHERE gender = %s AND {distance} > 0
             ORDER BY {distance} ASC
             LIMIT 10
@@ -44,36 +41,29 @@ def get_best_runners(gender, distance):
         cur.execute(sql, (gender,))
         best_runners = cur.fetchall()
 
-        cur.execute("SELECT * from ROSTER_DETAIL WHERE roster_id = %s", (roster_id,))
-        roster_detail = cur.fetchall()
-
-    # Convert roster_detail to a set for faster lookup
-    roster_detail_set = set(row['runner_id'] for row in roster_detail)
-
-    # Add 'is_in_latest_roster' key to each runner in male_runners_800
-    for runner in best_runners:
-        runner['is_in_latest_roster'] = 1 if runner['runner_id'] in roster_detail_set else 0
+    # Add ranking in Python
+    for i, runner in enumerate(best_runners, start=1):
+        runner['runner_ranking'] = i
 
     return best_runners
 
 def this_season_best_runners(gender, distance):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT roster_id FROM rosters WHERE gender = %s ORDER BY roster_year DESC LIMIT 1", (gender,))
+        cur.execute("SELECT roster_id FROM ygh_rosters WHERE gender = %s ORDER BY roster_year DESC LIMIT 1", (gender,))
         roster_id = cur.fetchone()['roster_id']
 
         sql = f"""
-            SELECT runners.runner_id, grad_year, {distance}, first_name, last_name,
-            ROW_NUMBER() OVER (ORDER BY {distance} ASC) as runner_ranking
-            FROM runners
-            JOIN roster_detail ON runners.runner_id = roster_detail.runner_id
-            WHERE gender = %s AND {distance} > 0 AND roster_detail.roster_id = %s
+            SELECT ygh_runners.runner_id, grad_year, {distance}, first_name, last_name
+            FROM ygh_runners
+            JOIN ygh_roster_detail ON ygh_runners.runner_id = ygh_roster_detail.runner_id
+            WHERE gender = %s AND {distance} > 0 AND ygh_roster_detail.roster_id = %s
             ORDER BY {distance} ASC
         """
         cur.execute(sql, (gender, roster_id))
         best_runners = cur.fetchall()
 
-        cur.execute("SELECT * from ROSTER_DETAIL WHERE roster_id = %s", (roster_id,))
+        cur.execute("SELECT * from ygh_roster_detail WHERE roster_id = %s", (roster_id,))
         roster_detail = cur.fetchall()
 
     # Convert roster_detail to a set for faster lookup
@@ -82,5 +72,9 @@ def this_season_best_runners(gender, distance):
     # Add 'is_in_latest_roster' key to each runner in male_runners_800
     for runner in best_runners:
         runner['is_in_latest_roster'] = 1 if runner['runner_id'] in roster_detail_set else 0
+
+    # Add ranking in Python
+    for i, runner in enumerate(best_runners, start=1):
+        runner['runner_ranking'] = i
 
     return best_runners

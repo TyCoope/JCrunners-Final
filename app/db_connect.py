@@ -8,10 +8,16 @@ def get_db():
         g.db = pymysql.connect(
             # Database configuration
             # Configure MySQL
-            host = 'localhost',
-            user = 'root',
+            #host = 'localhost',
+            #user = 'root',
+            #password = 'Andrew@2024',
+            #database = 'runner',
+            #cursorclass=pymysql.cursors.DictCursor  # Set the default cursor class to DictCursor
+            # Site Ground configuration
+            host = 'jonescountyxc.com',
+            user = 'unh0rrp9wrp6f',
             password = 'Andrew@2024',
-            database = 'runner',
+            database = 'dbzwp6bqvdjycw',
             cursorclass=pymysql.cursors.DictCursor  # Set the default cursor class to DictCursor
         )
     return g.db
