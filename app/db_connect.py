@@ -6,19 +6,19 @@ def get_db():
     if 'db' not in g or not is_connection_open(g.db):
         print("Re-establishing closed database connection.")
         g.db = pymysql.connect(
-            # Database configuration
-            # Configure MySQL
-            #host = 'localhost',
-            #user = 'root',
-            #password = 'Andrew@2024',
-            #database = 'runner',
-            #cursorclass=pymysql.cursors.DictCursor  # Set the default cursor class to DictCursor
-            # Site Ground configuration
-            host = 'jonescountyxc.com',
-            user = 'unh0rrp9wrp6f',
-            password = 'Andrew@2024',
-            database = 'dbzwp6bqvdjycw',
+            #Database configuration
+            #Configure MySQL
+            host = 'bryanmarshall.com',
+            user = 'uxag9ek69ngxu',
+            password = 'temp@2024',
+            database = 'db1xk2mxpvo9gr',
             cursorclass=pymysql.cursors.DictCursor  # Set the default cursor class to DictCursor
+            # Site Ground configuration
+           # host = 'jonescountyxc.com',
+           # user = 'unh0rrp9wrp6f',
+            #password = 'Andrew@2024',
+            #database = 'dbzwp6bqvdjycw',
+            #cursorclass=pymysql.cursors.DictCursor  # Set the default cursor class to DictCursor
         )
     return g.db
 
