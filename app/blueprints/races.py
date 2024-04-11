@@ -12,7 +12,7 @@ def race():
         race_date = request.form['race_date']
         conn = get_db()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO ygh_race (race_name, race_date, race_location, race_mile_split_url) VALUES (%s, %s, %s, %s)",
+            cur.execute("INSERT INTO race (race_name, race_date, race_location, race_mile_split_url) VALUES (%s, %s, %s, %s)",
                         (
                             race_name,
                             race_date,
@@ -25,7 +25,7 @@ def race():
 
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT EXTRACT(YEAR FROM race_date) as year, race_id, race_name, race_date, race_location, race_mile_split_url FROM ygh_race ORDER BY race_date")
+        cur.execute("SELECT EXTRACT(YEAR FROM race_date) as year, race_id, race_name, race_date, race_location, race_mile_split_url FROM race ORDER BY race_date")
         races_by_year = {}
         for row in cur.fetchall():
             year = row['year']
@@ -43,7 +43,7 @@ def update_race(race_id):
     race_mile_split_url = request.form['race_mile_split_url']
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("UPDATE ygh_race SET race_name=%s, race_date=%s, race_location=%s, race_mile_split_url=%s WHERE race_id=%s",
+        cur.execute("UPDATE race SET race_name=%s, race_date=%s, race_location=%s, race_mile_split_url=%s WHERE race_id=%s",
                     (
                         race_name,
                         race_date,
@@ -59,7 +59,7 @@ def update_race(race_id):
 def delete_race(race_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("DELETE FROM ygh_race WHERE race_id=%s", (race_id,))
+        cur.execute("DELETE FROM race WHERE race_id=%s", (race_id,))
         conn.commit()
     flash('Race deleted successfully')
     return redirect(url_for('races.race'))

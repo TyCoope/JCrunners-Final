@@ -9,7 +9,7 @@ def roster():
     if request.method == 'POST':
         conn = get_db()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO ygh_rosters (roster_year, roster_season, gender) "
+            cur.execute("INSERT INTO rosters (roster_year, roster_season, gender) "
                         "VALUES (%s, %s, %s)",
                         (
                             request.form['roster_year'],
@@ -26,7 +26,7 @@ def roster():
 def update_roster(roster_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("UPDATE ygh_rosters SET roster_year=%s, roster_season=%s, gender=%s WHERE roster_id=%s",
+        cur.execute("UPDATE rosters SET roster_year=%s, roster_season=%s, gender=%s WHERE roster_id=%s",
                     (
                         request.form['roster_year'],
                         request.form['roster_season'],
@@ -41,7 +41,7 @@ def update_roster(roster_id):
 def delete_roster(roster_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("DELETE FROM ygh_rosters WHERE roster_id=%s", (roster_id,))
+        cur.execute("DELETE FROM rosters WHERE roster_id=%s", (roster_id,))
         conn.commit()
     flash('Roster deleted successfully')
     return redirect(url_for('rosters.roster'))
@@ -51,7 +51,7 @@ def roster_details(roster_id):
     if request.method == 'POST':
         conn = get_db()
         with conn.cursor() as cur:
-            cur.execute("INSERT INTO ygh_roster_detail (roster_id, runner_id) "
+            cur.execute("INSERT INTO roster_detail (roster_id, runner_id) "
                         "VALUES (%s, %s)",
                         (
                             roster_id,
@@ -70,7 +70,7 @@ def roster_details(roster_id):
 def delete_runner_from_roster(roster_detail_id, roster_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("DELETE FROM ygh_roster_detail WHERE roster_detail_id=%s", (roster_detail_id))
+        cur.execute("DELETE FROM roster_detail WHERE roster_detail_id=%s", (roster_detail_id))
         conn.commit()
     flash('Runner removed from roster successfully')
     return redirect(url_for('rosters.roster_details', roster_id=roster_id))
@@ -79,7 +79,7 @@ def delete_runner_from_roster(roster_detail_id, roster_id):
 def add_runner_to_roster(roster_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("INSERT INTO ygh_roster_detail (roster_id, runner_id) "
+        cur.execute("INSERT INTO roster_detail (roster_id, runner_id) "
                     "VALUES (%s, %s)",
                     (
                         roster_id,
@@ -95,7 +95,7 @@ def add_runner_to_roster(roster_id):
 def get_rosters():
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT * FROM ygh_rosters ORDER BY roster_year DESC, roster_season ASC")
+        cur.execute("SELECT * FROM rosters ORDER BY roster_year DESC, roster_season ASC")
         rosters = cur.fetchall()
     return rosters
 
@@ -103,7 +103,7 @@ def get_rosters():
 def get_roster_info(roster_id):
     conn = get_db()
     with conn.cursor() as cur:
-        cur.execute("SELECT * FROM ygh_rosters WHERE roster_id=%s", (roster_id,))
+        cur.execute("SELECT * FROM rosters WHERE roster_id=%s", (roster_id,))
         roster = cur.fetchone()
     return roster
 
@@ -112,8 +112,8 @@ def get_roster_by_details(roster_id):
     conn = get_db()
     with conn.cursor() as cur:
         cur.execute("SELECT RD.roster_detail_id, R.first_name, R.last_name, R.grad_year, RD.roster_id "
-                    "FROM ygh_runners R "
-                    "JOIN ygh_roster_detail RD ON R.runner_id = RD.runner_id "
+                    "FROM runners R "
+                    "JOIN roster_detail RD ON R.runner_id = RD.runner_id "
                     "WHERE RD.roster_id = %s", (roster_id,))
         roster_details = cur.fetchall()
     return roster_details
@@ -125,7 +125,7 @@ def runner_dropdown(roster_id):
     conn = get_db()
     with conn.cursor() as cur:
         # Fetch the gender of the roster
-        cur.execute("SELECT gender FROM ygh_rosters WHERE roster_id = %s", (roster_id,))
+        cur.execute("SELECT gender FROM rosters WHERE roster_id = %s", (roster_id,))
         roster_gender_result = cur.fetchone()
         print(roster_gender_result)
         if roster_gender_result is None or not isinstance(roster_gender_result, dict):
@@ -138,12 +138,12 @@ def runner_dropdown(roster_id):
         # Fetch all runners that match the gender of the roster
         cur.execute("""
             SELECT R.runner_id, R.first_name, R.last_name 
-            FROM ygh_runners R 
+            FROM runners R 
             WHERE R.grad_year BETWEEN %s AND %s 
             AND R.gender = %s 
             AND R.runner_id NOT IN ( 
                 SELECT RD.runner_id 
-                FROM ygh_roster_detail RD 
+                FROM roster_detail RD 
                 WHERE RD.roster_id = %s 
             )
         """, (current_year, future_year, roster_gender, roster_id))
