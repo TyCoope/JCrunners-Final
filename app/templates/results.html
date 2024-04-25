@@ -16,52 +16,78 @@
 
 
                        <br>
-                        <h1>Male 800 Results</h1>
+                        <h1>Male 2024 Results</h1>
                         <br>
 
-                        <table  class="table">
-                          <thead>
-                            <th scope="col">Grad Year</th>
-                            <th scope="col">Runner Name</th>
-                            <th scope="col">Time</th>
-                            <th scope="col">Ranking</th>
-                          </thead>
-                            {% for male_runner_800 in male_runners_800 %}
-                                <tr style="{{ 'font-weight: bold;' if male_runner_800.is_in_latest_roster else '' }}">
-
-                                    <td align="left">{{ male_runner_800.grad_year }}</td>
-                                    <td align="left">{{ male_runner_800.first_name }} {{ male_runner_800.last_name }}</td>
-                                    <td align="left">{{ male_runner_800.time_800_pr }}</td>
-                                    <td align="left">{{ male_runner_800.runner_ranking }}</td>
-
-                                </tr>
-                                {% endfor %}
-
-                        </table>
+                        <table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>800m PR</th>
+            <th>800m Rank</th>
+            <th>1600m PR</th>
+            <th>1600m Rank</th>
+            <th>3200m PR</th>
+            <th>3200m Rank</th>
+            <th>Overall</th> <!-- New column for overall rank -->
+            <th>Place</th> <!-- New column for place rank -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for runner in male_runners_2024 %}
+            <tr>
+                <td>{{ runner.first_name }}</td>
+                <td>{{ runner.last_name }}</td>
+                <td>{{ runner.time_800_pr }}</td>
+                <td>{{ runner.time_800_rank }}</td>
+                <td>{{ runner.time_1600_pr }}</td>
+                <td>{{ runner.time_1600_rank }}</td>
+                <td>{{ runner.time_3200_pr }}</td>
+                <td>{{ runner.time_3200_rank }}</td>
+                <td>{{ runner.overall_rank }}</td> <!-- New column for overall rank -->
+                <td>{{ runner.place_rank }}</td> <!-- New column for place rank -->
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
                         <br>
-                        <h1>Female 800 Results</h1>
+                        <h1>Female 2024 Results</h1>
                         <br>
 
-                        <table  class="table">
-                          <thead>
-                            <th scope="col">Grad Year</th>
-                            <th scope="col">Runner Name</th>
-                            <th scope="col">Time</th>
-                            <th scope="col">Ranking</th>
-                          </thead>
-                            {% for female_runner_800 in female_runners_800 %}
-                                <tr style="{{ 'font-weight: bold;' if female_runner_800.is_in_latest_roster else '' }}">
-
-                                    <td align="left">{{ female_runner_800.grad_year }}</td>
-                                    <td align="left">{{ female_runner_800.first_name }} {{ female_runner_800.last_name }}</td>
-                                    <td align="left">{{ female_runner_800.time_800_pr }}</td>
-                                    <td align="left">{{ female_runner_800.runner_ranking }}</td>
-
-                                </tr>
-                                {% endfor %}
-
-                        </table>
+                        <table class="table">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>800m PR</th>
+            <th>800m Rank</th>
+            <th>1600m PR</th>
+            <th>1600m Rank</th>
+            <th>3200m PR</th>
+            <th>3200m Rank</th>
+            <th>Overall</th> <!-- New column for overall rank -->
+            <th>Place</th> <!-- New column for place rank -->
+        </tr>
+    </thead>
+    <tbody>
+        {% for runner in female_runners_2024 %}
+            <tr>
+                <td>{{ runner.first_name }}</td>
+                <td>{{ runner.last_name }}</td>
+                <td>{{ runner.time_800_pr }}</td>
+                <td>{{ runner.time_800_rank }}</td>
+                <td>{{ runner.time_1600_pr }}</td>
+                <td>{{ runner.time_1600_rank }}</td>
+                <td>{{ runner.time_3200_pr }}</td>
+                <td>{{ runner.time_3200_rank }}</td>
+                <td>{{ runner.overall_rank }}</td> <!-- New column for overall rank -->
+                <td>{{ runner.place_rank }}</td> <!-- New column for place rank -->
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
                         <br>
                         <h1>Male 1600 Results</h1>
