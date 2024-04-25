@@ -37,16 +37,16 @@
     <tbody>
         {% for runner in male_runners_2024 %}
             <tr>
-                <td>{{ runner.first_name }}</td>
-                <td>{{ runner.last_name }}</td>
-                <td>{{ runner.time_800_pr }}</td>
-                <td>{{ runner.time_800_rank }}</td>
-                <td>{{ runner.time_1600_pr }}</td>
-                <td>{{ runner.time_1600_rank }}</td>
-                <td>{{ runner.time_3200_pr }}</td>
-                <td>{{ runner.time_3200_rank }}</td>
-                <td>{{ runner.overall_rank }}</td> <!-- New column for overall rank -->
-                <td>{{ runner.place_rank }}</td> <!-- New column for place rank -->
+               <td>{{ runner.first_name }}</td>
+        <td>{{ runner.last_name }}</td>
+        <td style="{{ 'color: red;' if runner.time_800_pr else '' }}">{{ runner.time_800_pr if runner.time_800_pr else '' }}</td>
+        <td>{{ runner.time_800_rank }}</td>
+        <td style="{{ 'color: red;' if runner.time_1600_pr else '' }}">{{ runner.time_1600_pr if runner.time_1600_pr else '' }}</td>
+        <td>{{ runner.time_1600_rank }}</td>
+        <td style="{{ 'color: red;' if runner.time_3200_pr else '' }}">{{ runner.time_3200_pr if runner.time_3200_pr else '' }}</td>
+        <td>{{ runner.time_3200_rank }}</td>
+        <td>{{ runner.overall_rank }}</td>
+        <td>{{ runner.place_rank }}</td>
             </tr>
         {% endfor %}
     </tbody>
@@ -75,15 +75,15 @@
         {% for runner in female_runners_2024 %}
             <tr>
                 <td>{{ runner.first_name }}</td>
-                <td>{{ runner.last_name }}</td>
-                <td>{{ runner.time_800_pr }}</td>
-                <td>{{ runner.time_800_rank }}</td>
-                <td>{{ runner.time_1600_pr }}</td>
-                <td>{{ runner.time_1600_rank }}</td>
-                <td>{{ runner.time_3200_pr }}</td>
-                <td>{{ runner.time_3200_rank }}</td>
-                <td>{{ runner.overall_rank }}</td> <!-- New column for overall rank -->
-                <td>{{ runner.place_rank }}</td> <!-- New column for place rank -->
+        <td>{{ runner.last_name }}</td>
+        <td style="{{ 'color: red;' if runner.time_800_pr else '' }}">{{ runner.time_800_pr if runner.time_800_pr else '' }}</td>
+        <td>{{ runner.time_800_rank }}</td>
+        <td style="{{ 'color: red;' if runner.time_1600_pr else '' }}">{{ runner.time_1600_pr if runner.time_1600_pr else '' }}</td>
+        <td>{{ runner.time_1600_rank }}</td>
+        <td style="{{ 'color: red;' if runner.time_3200_pr else '' }}">{{ runner.time_3200_pr if runner.time_3200_pr else '' }}</td>
+        <td>{{ runner.time_3200_rank }}</td>
+        <td>{{ runner.overall_rank }}</td>
+        <td>{{ runner.place_rank }}</td>
             </tr>
         {% endfor %}
     </tbody>
