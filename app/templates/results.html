@@ -24,11 +24,11 @@
         <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>800m PR</th>
+            <th>800m</th>
             <th>800m Rank</th>
-            <th>1600m PR</th>
+            <th>1600m</th>
             <th>1600m Rank</th>
-            <th>3200m PR</th>
+            <th>3200m</th>
             <th>3200m Rank</th>
             <th>Overall</th> <!-- New column for overall rank -->
             <th>Place</th> <!-- New column for place rank -->
@@ -39,11 +39,11 @@
             <tr>
                <td>{{ runner.first_name }}</td>
         <td>{{ runner.last_name }}</td>
-        <td style="{{ 'color: red;' if runner.time_800_pr else '' }}">{{ runner.time_800_pr if runner.time_800_pr else '' }}</td>
+        <td style="{{ 'color: red;' if runner.time_800_pr else '' }}">{{ runner.time_800_pr if runner.time_800_pr else '' }}{% if runner.time_800_pr %}<span style="color: red;"> PR</span>{% endif %}</td>
         <td>{{ runner.time_800_rank }}</td>
-        <td style="{{ 'color: red;' if runner.time_1600_pr else '' }}">{{ runner.time_1600_pr if runner.time_1600_pr else '' }}</td>
+        <td style="{{ 'color: red;' if runner.time_1600_pr else '' }}">{{ runner.time_1600_pr if runner.time_1600_pr else '' }}{% if runner.time_1600_pr %}<span style="color: red;"> PR</span>{% endif %}</td>
         <td>{{ runner.time_1600_rank }}</td>
-        <td style="{{ 'color: red;' if runner.time_3200_pr else '' }}">{{ runner.time_3200_pr if runner.time_3200_pr else '' }}</td>
+        <td style="{{ 'color: red;' if runner.time_3200_pr else '' }}">{{ runner.time_3200_pr if runner.time_3200_pr else '' }}{% if runner.time_3200_pr %}<span style="color: red;"> PR</span>{% endif %}</td>
         <td>{{ runner.time_3200_rank }}</td>
         <td>{{ runner.overall_rank }}</td>
         <td>{{ runner.place_rank }}</td>
@@ -61,11 +61,11 @@
         <tr>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>800m PR</th>
+            <th>800m</th>
             <th>800m Rank</th>
-            <th>1600m PR</th>
+            <th>1600m</th>
             <th>1600m Rank</th>
-            <th>3200m PR</th>
+            <th>3200m</th>
             <th>3200m Rank</th>
             <th>Overall</th> <!-- New column for overall rank -->
             <th>Place</th> <!-- New column for place rank -->
@@ -76,11 +76,11 @@
             <tr>
                 <td>{{ runner.first_name }}</td>
         <td>{{ runner.last_name }}</td>
-        <td style="{{ 'color: red;' if runner.time_800_pr else '' }}">{{ runner.time_800_pr if runner.time_800_pr else '' }}</td>
+        <td style="{{ 'color: red;' if runner.time_800_pr else '' }}">{{ runner.time_800_pr if runner.time_800_pr else '' }}{% if runner.time_800_pr %}<span style="color: red;"> PR</span>{% endif %}</td>
         <td>{{ runner.time_800_rank }}</td>
-        <td style="{{ 'color: red;' if runner.time_1600_pr else '' }}">{{ runner.time_1600_pr if runner.time_1600_pr else '' }}</td>
+        <td style="{{ 'color: red;' if runner.time_1600_pr else '' }}">{{ runner.time_1600_pr if runner.time_1600_pr else '' }}{% if runner.time_1600_pr %}<span style="color: red;"> PR</span>{% endif %}</td>
         <td>{{ runner.time_1600_rank }}</td>
-        <td style="{{ 'color: red;' if runner.time_3200_pr else '' }}">{{ runner.time_3200_pr if runner.time_3200_pr else '' }}</td>
+        <td style="{{ 'color: red;' if runner.time_3200_pr else '' }}">{{ runner.time_3200_pr if runner.time_3200_pr else '' }}{% if runner.time_3200_pr %}<span style="color: red;"> PR</span>{% endif %}</td>
         <td>{{ runner.time_3200_rank }}</td>
         <td>{{ runner.overall_rank }}</td>
         <td>{{ runner.place_rank }}</td>
